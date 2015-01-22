@@ -4,22 +4,22 @@ module QueryMethodsExtend
       attr_accessor :extend_like_string
 
       scope :like, ->(agrs){
-        @extend_like_string = '%?%'
+        @extend_like_string = '%{?}%'
         like_basic agrs
       }
 
       scope :l_like, ->(agrs){
-        @extend_like_string = '%?'
+        @extend_like_string = '%{?}'
         like_basic agrs
       }
 
       scope :r_like, ->(agrs){
-        @extend_like_string = '?%'
+        @extend_like_string = '{?}%'
         like_basic agrs
       }
 
       scope :regex_like, ->(agrs){
-        @extend_like_string = '?'
+        @extend_like_string = '{?}'
         like_basic agrs
       }
 
@@ -28,7 +28,7 @@ module QueryMethodsExtend
           items = self
           agrs.each do |agr|
             field, value = agr
-            items = items.where("#{self.table_name}.#{field} LIKE ?", @extend_like_string.gsub('?', value.to_s))
+            items = items.where("#{self.table_name}.#{field} LIKE ?", @extend_like_string.gsub('{?}', value.to_s))
           end
           return items
         else
