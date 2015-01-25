@@ -18,14 +18,58 @@ include QueryMethodsExtend
 
 ## Usage
 
-The structure book model:
+The structure book models:
 ```ruby
-Book(
-  id: integer,
-  name: string,
-  price: decimal,
-  created_at: datetime,
-  updated_at: datetime
+class Store < ActiveRecord::Base
+  include QueryMethodsExtend
+  has_many :categories
+end
+// Store(id: integer, address: string)
+
+class Category < ActiveRecord::Base
+  include QueryMethodsExtend
+  belongs_to :store
+  has_many :books
+end
+// Category(id: integer, name: string, store_id: integer)
+
+class Book < ActiveRecord::Base
+  include QueryMethodsExtend
+  belongs_to :category
+end
+// Book(id: integer, name: string, price: integer, category_id: integer)
+```
+
+## Has_many with collection
+Before with asscociation **:has_many**, take **all categories in the stores** in Vietnam, we can write:
+```ruby
+Category.where(store_id: Store.where(address: 'Vietnam'))
+```
+And now we can write in collection:
+```ruby
+Store.where(address: 'Vietnam').categories
+
+***
+SELECT "categories".* FROM "categories"
+  WHERE (categories.store_id IN (
+    SELECT "stores"."id" FROM "stores"  WHERE "stores"."address" = 'Vietnam'
+  )
+)
+```
+
+And take **all books in the stores** in Vietnam (without use **:through**):
+```ruby
+Store.where(address: 'Vietnam').categories.books
+
+***
+SELECT "books".* FROM "books"
+  WHERE (books.category_id IN (
+    SELECT "categories"."id" FROM "categories"
+      WHERE (categories.store_id IN (
+        SELECT "stores"."id" FROM "stores"  WHERE "stores"."address" = 'Vietnam'
+      )
+    )
+  )
 )
 ```
 
@@ -108,9 +152,9 @@ SELECT "books".* FROM "books"
 
 ## Like query
 ```ruby
-Book.like(name: 'ruby')
+Book.like(name: 'ruby', price: '$')
 ***
-SELECT "books".* FROM "books"  WHERE (books.name LIKE '%ruby%')
+SELECT "books".* FROM "books"  WHERE (books.name LIKE '%ruby%' AND books.price LIKE '%$%')
 
 Book.l_like(name: 'ruby')
 ***
@@ -127,9 +171,9 @@ SELECT "books".* FROM "books"  WHERE (books.name LIKE '%ruby%')
 
 ## Operators query
 ```ruby
-Book.lt(price: 5)
+Book.lt(price: 5, id: 10)
 ***
-SELECT "books".* FROM "books"  WHERE (books.price < 5)
+SELECT "books".* FROM "books"  WHERE (books.price < 5 AND books.id < 10)
 
 Book.lteq(price: 5)
 ***

@@ -1,5 +1,5 @@
 module QueryMethodsExtend
-  module ExtendMethods
+  module OrExtend
     @is_query_or = false
 
     def set_is_query_or value
@@ -39,7 +39,7 @@ module QueryMethodsExtend
             raise 'Agruments should be a HASH'
           end
         else
-          all.extending(ExtendMethods).set_is_query_or(true)
+          all.set_is_query_or(true)
         end
       }
     end
