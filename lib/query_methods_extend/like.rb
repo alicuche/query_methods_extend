@@ -32,7 +32,7 @@ module QueryMethodsExtend
           end
           return items
         else
-          raise 'Agruments should be a HASH'
+          raise "Like method with agruments should be a HASH"
         end
       }
     end

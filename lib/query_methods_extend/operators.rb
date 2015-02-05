@@ -30,7 +30,7 @@ module QueryMethodsExtend
           end
           return items
         else
-          raise 'Agruments should be a HASH'
+          raise "Operators '#{@extend_operator_string}' with agruments should be a HASH"
         end
       }
     end

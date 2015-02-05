@@ -39,7 +39,7 @@ module QueryMethodsExtend
             raise 'Agruments should be a HASH'
           end
         else
-          all.set_is_query_or(true)
+          all.extending(OrExtend).set_is_query_or(true)
         end
       }
     end
