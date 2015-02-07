@@ -40,5 +40,6 @@ module QueryMethodsExtend
         expect(result).to match_array([@book1, @book2])
       end
     end
+
   end
 end

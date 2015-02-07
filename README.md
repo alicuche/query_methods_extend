@@ -11,30 +11,22 @@ Add this line to your application's Gemfile:
 gem 'query_methods_extend'
 ```
 
-And model file:
-```ruby
-include QueryMethodsExtend
-```
-
 ## Usage
 
 The structure book models:
 ```ruby
 class Store < ActiveRecord::Base
-  include QueryMethodsExtend
   has_many :categories
 end
 // Store(id: integer, address: string)
 
 class Category < ActiveRecord::Base
-  include QueryMethodsExtend
   belongs_to :store
   has_many :books
 end
 // Category(id: integer, name: string, store_id: integer)
 
 class Book < ActiveRecord::Base
-  include QueryMethodsExtend
   belongs_to :category
 end
 // Book(id: integer, name: string, price: integer, category_id: integer)
@@ -57,7 +49,7 @@ SELECT "categories".* FROM "categories"
 )
 ```
 
-And take **all books in the stores** in Vietnam (without use **:through**):
+And take **all books in the stores** in Vietnam:
 ```ruby
 Store.where(address: 'Vietnam').categories.books
 

@@ -3,38 +3,40 @@ module QueryMethodsExtend
     included do
       attr_accessor :extend_like_string
 
-      scope :like, ->(agrs){
+      def self.like agrs
         @extend_like_string = '%{?}%'
         like_basic agrs
-      }
+      end
 
-      scope :l_like, ->(agrs){
+      def self.l_like agrs
         @extend_like_string = '%{?}'
         like_basic agrs
-      }
+      end
 
-      scope :r_like, ->(agrs){
+      def self.r_like agrs
         @extend_like_string = '{?}%'
         like_basic agrs
-      }
+      end
 
-      scope :regex_like, ->(agrs){
+      def self.regex_like agrs
         @extend_like_string = '{?}'
         like_basic agrs
-      }
+      end
 
-      scope :like_basic, ->(agrs){
-        if agrs.class == Hash
-          items = self
-          agrs.each do |agr|
-            field, value = agr
-            items = items.where("#{self.table_name}.#{field} LIKE ?", @extend_like_string.gsub('{?}', value.to_s))
+      private
+        def self.like_basic agrs
+          if agrs.class == Hash
+            items = self
+            agrs.each do |agr|
+              field, value = agr
+              items = items.where("#{self.table_name}.#{field} LIKE ?", @extend_like_string.gsub('{?}', value.to_s))
+            end
+            return items
+          else
+            raise "Like method with agruments should be a HASH"
           end
-          return items
-        else
-          raise "Like method with agruments should be a HASH"
         end
-      }
+
     end
   end
 end

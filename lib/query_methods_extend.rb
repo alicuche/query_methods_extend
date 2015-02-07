@@ -1,4 +1,5 @@
 require "query_methods_extend/version"
+require "query_methods_extend/railtie"
 require "query_methods_extend/association"
 require "query_methods_extend/or"
 require "query_methods_extend/like"

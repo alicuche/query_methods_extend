@@ -30,7 +30,7 @@ module QueryMethodsExtend
 
   module OrQuery extend ActiveSupport::Concern
     included do
-      scope :or, ->(agrs = nil){
+      def self.or agrs = nil
         if agrs
           if agrs.class == Hash
             act = self.unscoped.where(agrs).where_values.map{ |data| data.to_sql }.join(' OR ')
@@ -41,7 +41,8 @@ module QueryMethodsExtend
         else
           all.extending(OrExtend).set_is_query_or(true)
         end
-      }
+      end
     end
   end
+
 end

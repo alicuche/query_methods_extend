@@ -12,7 +12,7 @@ module QueryMethodsExtend
 
         association = self.try(:reflect_on_association, method_name)
         result = false
-        if association && association.macro == :has_many
+        if association && association.try(:macro) == :has_many
           model_reflect = association.inverse_of
           model = model_reflect.active_record
           query = self.select(association.primary_key_column.name)

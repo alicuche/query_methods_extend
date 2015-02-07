@@ -1,13 +1,15 @@
 require "query_methods_extend"
-require "query_methods_extend/basic"
+# require "query_methods_extend/railtie"
 require "query_methods_extend/association"
 require "query_methods_extend/like"
 require "query_methods_extend/operators"
 require "query_methods_extend/or"
 require "query_methods_extend/union"
-require 'models/book.rb'
-require 'models/category.rb'
-require 'models/store.rb'
+require "query_methods_extend/activerecord"
+
+require 'models/book'
+require 'models/category'
+require 'models/store'
 
 def run_migrate
   ActiveRecord::Base.establish_connection(
