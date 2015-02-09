@@ -17,6 +17,7 @@ The structure book models:
 ```ruby
 class Store < ActiveRecord::Base
   has_many :categories
+  has_many :books, through: :categories
 end
 // Store(id: integer, address: string)
 
@@ -53,6 +54,9 @@ And take **all books in the stores** in Vietnam:
 ```ruby
 Store.where(address: 'Vietnam').categories.books
 
+# With option :through
+Store.where(address: 'Vietnam').books
+
 ***
 SELECT "books".* FROM "books"
   WHERE (books.category_id IN (
@@ -64,6 +68,9 @@ SELECT "books".* FROM "books"
   )
 )
 ```
+
+This can work fine with the options **through**, **class**, **foreign_key**, **polymorphic**
+
 
 ## Union query
 ```ruby
